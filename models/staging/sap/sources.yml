@@ -11,6 +11,8 @@ sources:
           - name: id
             tests:
               - unique
-              - not null
+              - not_null
       - name: category
       - name: supplier
+      - name: orders
+      - name: orders_details
