@@ -4,6 +4,16 @@ with
         from {{ ref('dim_produtos') }}
     )
 
+    , dim_clientes as (
+        select *
+        from {{ ref('dim_clientes') }}
+    )
+
+    , dim_funcionarios as (
+        select *
+        from {{ ref('dim_funcionarios') }}
+    )
+
     , ordem_detalhes as (
         select *
         from {{ ref('stg_sap__ordem_detalhes') }}
@@ -44,8 +54,16 @@ with
             , dim_produtos.nm_produto
             , dim_produtos.nm_fornecedor
             , dim_produtos.nm_categoria
+            , dim_funcionarios.nm_funcionario
+            , dim_funcionarios.nm_gerente
+            , dim_clientes.nm_cliente
+            , dim_clientes.empresa_cliente
+            , dim_clientes.cidade_cliente
+            , dim_clientes.pais_cliente
         from joined_ordens_itens as fatos
         left join dim_produtos on fatos.fk_produto = dim_produtos.pk_produto
+        left join dim_funcionarios on fatos.fk_funcionario = dim_funcionarios.pk_funcionario
+        left join dim_clientes on fatos.fk_cliente = dim_clientes.pk_cliente
     )
 
     /* Criação de métricas e chave primária da tabela. */
@@ -65,3 +83,4 @@ with
 
 select *
 from metricas
+
